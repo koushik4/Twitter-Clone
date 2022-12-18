@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>twitter</title>
+    </head>
+<body>
+ 
+<h1>Twitter</h1>
+<!-- /koushik/twtter -->
+  <textarea id="tweet" rows="3",cols="50"></textarea>
+  <button onclick="tweet()">tweet</button><br>
+
+  <textarea id="subscribe" rows="1",cols="50"></textarea>
+  <button onclick="subscribe()">Subscribe</button><br>
+
+  <textarea id="hashtag" rows="1",cols="50"></textarea>
+  <button onclick="search_hashtag()">Search Hashtag</button><br>
+
+  <textarea id="mention" rows="1",cols="50"></textarea>
+  <button onclick="search_mention()">Search Mention</button><br>
+
+  <textarea id="search_subscribe" rows="1",cols="50"></textarea>
+  <button onclick="search_subscribe()">Search Subscribe</button><br>
+  <form action="./feed">
+    <input type="submit" value="my feed">
+  </form> 
+  <div id="feed">
+  </div>
+  <script>
+    var ws = new WebSocket("ws://127.0.0.1:8889");
+ws.onopen = function() {
+    console.log('Connected');
+    ws.send("update_handler-"+window.location.pathname.split("/")[1])
+};
+var intervalId = window.setInterval(function(){
+ws.send("");
+}, 3000);
+ws.onmessage = function(event) {
+  if(event.data == "")return;
+    var x = event.data.split("-");
+    if(x.length == 2) {
+      alert(x[1]);
+      return;
+    }
+    var a = document.getElementById("feed");
+    let count = a.childElementCount;
+    var b = "<textarea id="+count+">"+event.data+"</textarea><button onclick=retweet("+count+")>retweet</button><br>";
+    console.log(b);
+    a.innerHTML += b;
+}
+function tweet() {
+    let tweet = document.getElementById("tweet").value;
+    username = window.location.pathname.split("/")[1];
+    ws.send("tweet-"+username+"-"+tweet);
+    console.log(window.location.pathname.split("/")[1]);
+    tweet.value = "";
+}
+function subscribe() {
+  let username2 = document.getElementById("subscribe").value;
+  username1 = window.location.pathname.split("/")[1];
+  ws.send("subscribe-"+username1+"-"+username2);
+  console.log(window.location.pathname.split("/")[1]);
+  document.getElementById("subscribe").value = "";
+}
+function search_hashtag() {
+  let hashtag = document.getElementById("hashtag").value;
+  username = window.location.pathname.split("/")[1];
+  ws.send("hashtag-"+username+"-"+hashtag);
+  document.getElementById("hashtag").value = "";
+}
+function search_mention() {
+  let hashtag = document.getElementById("mention").value;
+  username = window.location.pathname.split("/")[1];
+  ws.send("mention-"+username+"-"+hashtag);
+  hashtag.value = "";
+}
+function search_subscribe() {
+  let hashtag = document.getElementById("search_subscribe").value;
+  username = window.location.pathname.split("/")[1];
+  ws.send("search-"+username+"-"+hashtag);
+  hashtag.value = "";
+}
+function retweet(a) {
+  let tweet = document.getElementById(a).value;
+  console.log(tweet);
+  username = window.location.pathname.split("/")[1];
+  ws.send("retweet-"+username+"-"+tweet);
+  console.log(a);
+}
+  </script>
+</body>
+</html>

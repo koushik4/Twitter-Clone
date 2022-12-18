@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script type="text/javascript">
+    var ws = new WebSocket("ws://127.0.0.1:8889");
+    console.log(ws);
+    ws.onopen = function() {
+        console.log('Connected');
+        ws.send("grggrrge");
+    };
+    
+    var intervalId = window.setInterval(function(){
+        dataObj = { "type" : "alive", "data":" "};
+        const map1 = new Map();
+        map1.set('a', 1);
+        ws.send(map1);
+    }, 3000);
+
+    ws.onmessage = function(event) {
+        console.log(event.data);
+    }
+</script>
+</head>
+<body>
+<div id="sse">
+   <a href="javascript:open()">Open websocket connection</a><br/>
+   <a href="javascript:send()">Send Message</a>
+</div>
+<div id="msgs">
+</div>
+</body>
+</html>

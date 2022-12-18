@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>twitter</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    *,
+    *:before,
+    *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: #384047;
+    }
+
+    .div-1 {
+      max-width: 800px;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: #f4f7f8;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+
+    h1 {
+      margin: 0 0 30px 0;
+      text-align: center;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    input[type="datetime"],
+    input[type="email"],
+    input[type="number"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="time"],
+    input[type="url"],
+    textarea,
+    select {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      font-size: 16px;
+      height: auto;
+      margin: 0;
+      outline: 0;
+      padding: 10px;
+      width: 100%;
+      background-color: #e8eeef;
+      color: #8a97a0;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+      margin-bottom: 30px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin: 0 4px 8px 0;
+    }
+
+    select {
+      padding: 6px;
+      height: 32px;
+      border-radius: 2px;
+    }
+
+    button {
+      padding: 10px;
+      color: rgb(250, 252, 253);
+      background-color: #348df1;
+      font-size: 15px;
+      text-align: center;
+      font-style: normal;
+      width: 100px;
+      border: 1px solid #348df1;
+      box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+      margin-bottom: 10px;
+      border-radius: 16px;
+    }
+
+    fieldset {
+      margin-bottom: 30px;
+      border: none;
+    }
+
+    legend {
+      font-size: 1.4em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    label.light {
+      font-weight: 300;
+      display: inline;
+    }
+
+    .number {
+      background-color: #5fcf80;
+      color: #fff;
+      height: 30px;
+      width: 30px;
+      display: inline-block;
+      font-size: 0.8em;
+      margin-right: 4px;
+      line-height: 30px;
+      text-align: center;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+      border-radius: 100%;
+    }
+
+    .inline-div {
+      display: inline-block;
+      float: left;
+      margin-right: 0%;
+      overflow: hidden;
+    }
+
+    .inline-div1 {
+      display: inline-block;
+      text-align: center;
+      width: 50%;
+      margin-left: 0;
+      overflow-y:auto
+      
+    }
+
+    .feedstyle {
+      border-style: 1px solid;
+      max-width: 500px;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: #f4f7f8;
+      text-align: center;
+    }
+
+    .main-div {
+      margin-left: 20%;
+      text-align: center;
+      max-width: 900px;
+    }
+
+    @media screen and (min-width: 480px) {
+
+      form {
+        max-width: 480px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Twitter</h1>
+  <!-- /koushik/twtter -->
+  <div class="main-div">
+    <div class="inline-div">
+
+      <div class="div-1">
+        <textarea id="tweet" rows="3" ,cols="50" placeholder="Let the World know how you Feel!"></textarea>
+        <button onclick="tweet()">Tweet</button><br>
+      </div>
+
+      <div class="div-1">
+        <p>Now subscribe to your friends on Twitter</p>
+        <textarea id="subscribe" rows="1" ,cols="50" placeholder="Enter Username Here"></textarea>
+        <button onclick="subscribe()" font-size="15">Subscribe</button><br>
+      </div>
+
+      <div class="div-1">
+        <p>Search Tweets by #Hashtags</p>
+        <textarea id="hashtag" rows="1" ,cols="50" placeholder="Enter Hashtag Here"></textarea>
+        <button onclick="search_hashtag()">Search</button><br>
+      </div>
+
+      <div class="div-1">
+        <p>Search Tweets by @Mentions</p>
+        <textarea id="mention" rows="1" ,cols="50" placeholder="Enter Mention Here"></textarea>
+        <button onclick="search_mention()">Search</button><br>
+      </div>
+
+      <div class="div-1">
+        <p>Search Tweets by Subscribers</p>
+        <textarea id="search_subscribe" rows="1" ,cols="50" placeholder="Enter Username Here"></textarea>
+        <button onclick="search_subscribe()">Search</button><br>
+      </div>
+
+    </div>
+
+    <div class="inline-div1">      
+    </div>
+  </div>
+
+  </div>
+  <script>
+    var ws = new WebSocket("ws://127.0.0.1:8889");
+ws.onopen = function() {
+    console.log('Connected');
+    ws.send("update_handler-"+window.location.pathname.split("/")[1])
+};
+var intervalId = window.setInterval(function(){
+ws.send("");
+}, 3000);
+ws.onmessage = function(event) {
+  if(event.data == "")return;
+    var x = event.data.split("-");
+    if(x.length == 2) {
+      if(x[1].length ==0)alert("Results not found");
+      else
+      alert(x[1]);
+      return;
+    }
+    var a = document.getElementsByClassName("inline-div1")[0];
+    let count = a.childElementCount;
+    var b = '<div class="feedstyle"><p id='+count+">"+event.data+"</p><button onclick=retweet("+count+")>retweet</button><br></div>";
+    console.log(b);
+    a.innerHTML += b;
+}
+function tweet() {
+    let tweet = document.getElementById("tweet").value;
+    username = window.location.pathname.split("/")[1];
+    ws.send("tweet-"+username+"-"+tweet);
+    console.log(window.location.pathname.split("/")[1]);
+    document.getElementById("tweet").value = "";
+}
+function subscribe() {
+  let username2 = document.getElementById("subscribe").value;
+  username1 = window.location.pathname.split("/")[1];
+  ws.send("subscribe-"+username1+"-"+username2);
+  console.log(window.location.pathname.split("/")[1]);
+  document.getElementById("subscribe").value = "";
+}
+function search_hashtag() {
+  let hashtag = document.getElementById("hashtag").value;
+  username = window.location.pathname.split("/")[1];
+  ws.send("hashtag-"+username+"-"+hashtag);
+  document.getElementById("hashtag").value = "";
+}
+function search_mention() {
+  let hashtag = document.getElementById("mention").value;
+  username = window.location.pathname.split("/")[1];
+  ws.send("mention-"+username+"-"+hashtag);
+  hashtag.value = "";
+}
+function search_subscribe() {
+  let hashtag = document.getElementById("search_subscribe").value;
+  username = window.location.pathname.split("/")[1];
+  ws.send("search-"+username+"-"+hashtag);
+  hashtag.value = "";
+}
+function retweet(a) {
+  let tweet = document.getElementById(a).textContent;
+  console.log(tweet);
+  username = window.location.pathname.split("/")[1];
+  ws.send("retweet-"+username+"-"+tweet);
+  console.log(a);
+}
+  </script>
+</body>
+</html>

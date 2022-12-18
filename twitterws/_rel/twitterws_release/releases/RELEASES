@@ -1,0 +1,15 @@
+%% coding: utf-8
+[{release,"twitterws_release","1","13.1.1",
+          [{kernel,"8.5.1","./lib/kernel-8.5.1"},
+           {stdlib,"4.1.1","./lib/stdlib-4.1.1"},
+           {crypto,"5.1.2","./lib/crypto-5.1.2"},
+           {cowlib,"2.11.0","./lib/cowlib-2.11.0"},
+           {asn1,"5.0.21","./lib/asn1-5.0.21"},
+           {public_key,"1.13.1","./lib/public_key-1.13.1"},
+           {ssl,"10.8.5","./lib/ssl-10.8.5"},
+           {ranch,"1.8.0","./lib/ranch-1.8.0"},
+           {cowboy,"2.9.0","./lib/cowboy-2.9.0"},
+           {twitterws,"0.1.0","./lib/twitterws-0.1.0"},
+           {sasl,"4.2","./lib/sasl-4.2"},
+           {runtime_tools,"1.19","./lib/runtime_tools-1.19"}],
+          permanent}].
